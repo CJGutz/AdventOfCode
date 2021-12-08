@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.HashMap;
 
-public class Dec6Part1 {
+public class Dec6Part2 {
     public static void main(String[] args) {
         FileReader fr;
         StringBuilder sb = new StringBuilder();
@@ -45,7 +45,7 @@ public class Dec6Part1 {
         }
 
         System.out.println(fishes);
-        int days = 80;
+        int days = 256;
         for (int i = 0; i < days; i++) {
             long newFishes = fishes.get(0);
             for (int j = 1; j < fishes.size() - 1; j++) {
