@@ -43,12 +43,12 @@ class Dec9Part2 {
                 String color = "\033[0m"; // Reset color
 
                 if (inputs[i].charAt(j) != '9') { // Dont visit any nines
-                    color = "\033[38;2;255;" + (10 + 20 * Integer.parseInt(String.valueOf(inputs[i].charAt(j)))) + ";50m"; // change to color dynamic to number
+                    color = "\033[48;2;0;" + (10 + 20 * Integer.parseInt(String.valueOf(inputs[i].charAt(j)))) + ";50m"; // change to color dynamic to number
                     int[] n = {i,j}; 
                     stack.add(n);
                 }
 
-                graphical.append(color + inputs[i].charAt(j)).append(" "); // Print number with color
+                graphical.append(color + "  "); // Print number with color
 
                 while (!stack.isEmpty()) {
                     sumBasin += 1; // Adds up as long as there are availble cells that are not nines, not visited or already in the stack
@@ -74,7 +74,7 @@ class Dec9Part2 {
                     basins.add(sumBasin); // Add number of cells in one basin to a list
                 }
             }
-            graphical.append("\n");
+            graphical.append("\033[0m\n");
         }
         
         Collections.sort(basins, Collections.reverseOrder());
