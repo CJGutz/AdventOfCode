@@ -3,9 +3,21 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import javax.swing.*;
+import java.awt.event.*;
 
-class Dec9Part2 {
+class Dec9Part2Animation implements ActionListener {
+
+    private static JFrame frame = new JFrame();
+    private static JPanel panel = new JPanel();
+    private static JLabel txt = new JLabel();
+    private static String[] inputs;
+    private static ArrayList<int[]> visited;
+
     public static void main(String[] args) {
+
+        makeFrame();
+
         FileReader fr;
         StringBuilder sb = new StringBuilder();
         try {
@@ -23,7 +35,7 @@ class Dec9Part2 {
         }
         String text = sb.toString();
 
-        String[] inputs = text.split("\n");
+        inputs = text.split("\n");
 
         for (int i = 0; i < inputs.length; i++) {
             inputs[i] = inputs[i].trim(); // trim all String so no whitespace is caught
@@ -31,7 +43,7 @@ class Dec9Part2 {
 
 
         ArrayList<int[]> stack = new ArrayList<>(); // A queue of which cells is to be visited first
-        ArrayList<int[]> visited = new ArrayList<>(); // List of cells that are visited
+        visited = new ArrayList<>(); // List of cells that are visited
         ArrayList<Integer> basins = new ArrayList<>(); // List of number of cells in each basin
 
         StringBuilder graphical = new StringBuilder(); // String for graphical basins
@@ -42,20 +54,21 @@ class Dec9Part2 {
                 int sumBasin = 0; // Number of cells in one basin
 
                 String color = "\033[0m"; // Reset color
-
+                
+                int[] n = {i,j}; 
                 if (inputs[i].charAt(j) != '9') { // Dont visit any nines
                     color = "\033[48;2;0;" + (10 + 20 * Integer.parseInt(String.valueOf(inputs[i].charAt(j)))) + ";50m"; // change to color dynamic to number
-                    int[] n = {i,j}; 
                     stack.add(n);
                 }
 
-                graphical.append(color + "  "); // Print number with color
+                graphical.append(color + "  "); // Print with color
 
                 while (!stack.isEmpty()) {
                     sumBasin += 1; // Adds up as long as there are availble cells that are not nines, not visited or already in the stack
 
                     int[] next = stack.remove(0); // Visit the first cell in the stack
-                    visited.add(next); // say it is visited
+                    if (!inList(next[0], next[1], visited))
+                        visited.add(next); // say it is visited
 
 
                     for (int y = -1; y <= 1; y++)
@@ -81,6 +94,9 @@ class Dec9Part2 {
         Collections.sort(basins, Collections.reverseOrder());
         System.out.println(basins.get(0) * basins.get(1) * basins.get(2)); // Solution given there are more than three basins
         System.out.println(graphical.toString()); // Print out graphical basins
+
+        Dec9Part2Animation a = new Dec9Part2Animation();
+        a.animate(visited, inputs);
     }
 
     public static boolean inList(int nextY, int nextX, ArrayList<int[]> list) {
@@ -90,6 +106,43 @@ class Dec9Part2 {
             }
         }
         return false;
+    }
+
+    public static void makeFrame() {
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        txt.setHorizontalAlignment(0);
+        panel.add(txt);
+        frame.add(panel);
+        frame.setSize(500, 500);
+        frame.setVisible(true);
+    }
+
+    public void animate(ArrayList<int[]> visited, String[] inputs) {
+        String[][] cells = new String[inputs.length][inputs[0].length()];
+        for (int[] vC : visited) {
+            cells[vC[0]][vC[1]] = "<b style=\"background-color:rgb(255, " + (10 + 20 * Integer.parseInt(String.valueOf(inputs[vC[0]].charAt(vC[1])))) + ", 50)\">" + "_ " + " </b>";
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("<html>");
+            for (int i = 0; i < cells.length; i++) {
+                for (int j = 0; j < cells[i].length; j++) {
+                    if (cells[i][j] == null) {
+                        sb.append("_ ");
+                    } else sb.append(cells[i][j]);
+                }
+                sb.append("<br/>");
+            }
+            sb.append("</html>");
+
+            txt.setText(sb.toString());
+        }
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        
+        
     }
 
 }
