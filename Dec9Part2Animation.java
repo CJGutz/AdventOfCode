@@ -6,7 +6,7 @@ import java.util.Collections;
 import javax.swing.*;
 import java.awt.event.*;
 
-class Dec9Part2Animation implements ActionListener {
+class Dec9Part2Animation {
 
     private static JFrame frame = new JFrame();
     private static JPanel panel = new JPanel();
@@ -95,8 +95,8 @@ class Dec9Part2Animation implements ActionListener {
         System.out.println(basins.get(0) * basins.get(1) * basins.get(2)); // Solution given there are more than three basins
         System.out.println(graphical.toString()); // Print out graphical basins
 
-        Dec9Part2Animation a = new Dec9Part2Animation();
-        a.animate(visited, inputs);
+        animateSwing(visited, inputs);
+        //animateTerminal(visited, inputs);
     }
 
     public static boolean inList(int nextY, int nextX, ArrayList<int[]> list) {
@@ -117,10 +117,10 @@ class Dec9Part2Animation implements ActionListener {
         frame.setVisible(true);
     }
 
-    public void animate(ArrayList<int[]> visited, String[] inputs) {
+    public static void animateSwing(ArrayList<int[]> visited, String[] inputs) {
         String[][] cells = new String[inputs.length][inputs[0].length()];
         for (int[] vC : visited) {
-            cells[vC[0]][vC[1]] = "<b style=\"background-color:rgb(255, " + (10 + 20 * Integer.parseInt(String.valueOf(inputs[vC[0]].charAt(vC[1])))) + ", 50)\">" + "_ " + " </b>";
+            cells[vC[0]][vC[1]] = "<b style=\"background-color:rgb(0, " + (10 + 20 * Integer.parseInt(String.valueOf(inputs[vC[0]].charAt(vC[1])))) + ", 50)\">" + "_ " + " </b>";
 
             StringBuilder sb = new StringBuilder();
             sb.append("<html>");
@@ -139,10 +139,22 @@ class Dec9Part2Animation implements ActionListener {
 
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        
-        
-    }
 
+    public static void animateTerminal(ArrayList<int[]> visited, String[] inputs) {
+        String[][] cells = new String[inputs.length][inputs[0].length()];
+        for (int[] vC : visited) {
+            cells[vC[0]][vC[1]] = "\033[48;2;0;" + (10 + 20 * Integer.parseInt(String.valueOf(inputs[vC[0]].charAt(vC[1])))) + ";50m" + "  " + "\033[0m" ;
+            
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < cells.length; i++) {
+                for (int j = 0; j < cells[i].length; j++) {
+                    if (cells[i][j] == null) {
+                        sb.append("  ");
+                    } else sb.append(cells[i][j]);
+                }
+                sb.append("\n");
+            }
+            System.out.print("\033[H\033[2J" + sb.toString());
+        }
+    }
 }
