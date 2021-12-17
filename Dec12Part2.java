@@ -1,11 +1,10 @@
 import java.util.*;
 import java.io.*;
 
-public class Dec12Part1 {
+public class Dec12Part2 {
 
     private static HashMap<String, ArrayList<String>> intersections;
     public static ArrayList<String> paths;
-    
     public static void main(String[] args) {
         FileReader fr;
         StringBuilder sb = new StringBuilder();
@@ -58,7 +57,8 @@ public class Dec12Part1 {
     }
 
     public static void dfs(String cave, String path) {
-        if (!cave.equals("end") && !contains(path.split(","), cave.toLowerCase())) {
+        boolean check = contains(path.split(","), cave.toLowerCase());
+        if (!cave.equals("end") && !check) {
             for (String neighbour : intersections.get(cave)) {
                 dfs(neighbour, path + "," + cave);
             }
@@ -75,10 +75,24 @@ public class Dec12Part1 {
         if (query.equals("start") || query.equals("end"))
             return true;
 
+        boolean hasDouble = false;
+        int c = 0;
+        for (int i = 0; i < list.length; i++)
+            for (int j = 0; j < list.length; j++)
+                if (list[i].toLowerCase().equals(list[j]) && i!=j) {
+                    c++;
+                    if (c > 1) {
+                        hasDouble = true;
+                    }
+                }
+
+        int count = 0;
         for (String item : list) {
             if (item.equals(query)) {
-                return true;
-
+                count++;
+                if (count > 1 || hasDouble) {
+                    return true;
+                }
             }
         }
         return false;
