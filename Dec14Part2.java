@@ -10,7 +10,7 @@ public class Dec14Part2 {
         FileReader fr;
         StringBuilder sb = new StringBuilder();
         try {
-            fr = new FileReader("C:\\Users\\cjgut\\Desktop\\Advent of code\\small.txt");
+            fr = new FileReader("C:\\Users\\cjgut\\Desktop\\Advent of code\\inputdec14.txt");
             int i = fr.read();
             while (i != -1) {
                 sb.append((char) i);
@@ -53,9 +53,7 @@ public class Dec14Part2 {
 
         ArrayList<String> list = new ArrayList<>(pairs.keySet());
 
-        for (int step = 0; step < 10; step++) {
-            System.out.println(characters);
-            System.out.println(pairs);
+        for (int step = 0; step < 40; step++) {
 
             for (String pair : list) {
 
@@ -67,19 +65,31 @@ public class Dec14Part2 {
                 pairs.put(pair, 0l);
                 
                 if (number != 0) {
-                    pairsNextStep.put(key1, pairs.get(key1) + 1);
-                    pairsNextStep.put(key2, pairs.get(key2) + 1);
+                    pairsNextStep.put(key1, pairsNextStep.get(key1) + number);
+                    pairsNextStep.put(key2, pairsNextStep.get(key2) + number);
+                    characters.put(c, characters.get(c) + number);
                 }
-                
-                characters.put(c, characters.get(c) + number);
+
             }
 
-            for (String pair : list)
-                pairs.put(pair, pairs.get(pair) + pairsNextStep.get(pair));
+            for (String pair : list) {
+                pairs.put(pair, pairsNextStep.get(pair));
+                pairsNextStep.put(pair, 0l);
+            }
 
         }
 
+        long max = 0l;
+        for (long i : characters.values()) {
+            if (i > max) max = i;
+        }
+        long min = 100000000000000000l;
+        for (long i : characters.values()) {
+            if (i < min) min = i;
+        }
+        
         System.out.println(characters);
+        System.out.println(max - min);
 
     }
 
