@@ -1,9 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class Dec14Part2 {
     public static void main(String[] args) {
