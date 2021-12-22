@@ -5,7 +5,7 @@ public class Dec2Part2 {
         FileReader fr;
         StringBuilder sb = new StringBuilder();
         try {
-            fr = new FileReader("C:\\Users\\cjgut\\Desktop\\Advent of code\\inputdec2.txt");
+            fr = new FileReader("inputdec2.txt");
             int i = fr.read();
             while (i != -1) {
                 sb.append((char) i);
