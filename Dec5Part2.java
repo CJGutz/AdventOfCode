@@ -7,7 +7,7 @@ public class Dec5Part2 {
         FileReader fr;
         StringBuilder sb = new StringBuilder();
         try {
-            fr = new FileReader("C:\\Users\\cjgut\\Desktop\\Advent of code\\inputdec5.txt");
+            fr = new FileReader("inputdec5.txt");
             int i = fr.read();
             while (i != -1) {
                 sb.append((char) i);
@@ -87,9 +87,7 @@ public class Dec5Part2 {
                     map.put(key, 1);
                 } else
                     map.put(key, 2);
-                if (startX == 796 && startY == 793) {
-                    System.out.println(key);
-                }
+
             }
         }
 
