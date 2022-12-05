@@ -1,0 +1,1 @@
+with open("input.txt") as f:  print(sum(map(lambda letter: ord(letter) - ((38) if letter.isupper() else (96)), map(lambda pack: set(pack[0:len(pack)//2]).intersection(set(pack[len(pack)//2:len(pack)])).pop(), [line.strip() for line in f.readlines()]))))
