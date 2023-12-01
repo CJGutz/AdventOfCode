@@ -41,19 +41,13 @@ pub fn run() {
         .lines()
         .map(|line| {
             let digits = sorted_digits(line);
-            //dbg!(&line, &digits);
             let ofirst = digits.first();
             let osecond = digits.last();
             if ofirst.is_none() || osecond.is_none() {
                 return 0;
             }
-            let (first_index, first_digit) = ofirst.unwrap();
-            let (second_index, second_digit) = osecond.unwrap();
-            if first_index == second_index {
-                println!("{}: {}", line, first_digit);
-                return *first_digit;
-            }
-            println!("{}: {}", line, first_digit * 10 + second_digit);
+            let (_, first_digit) = ofirst.unwrap();
+            let (_, second_digit) = osecond.unwrap();
             return first_digit * 10 + second_digit;
         })
         .sum();
