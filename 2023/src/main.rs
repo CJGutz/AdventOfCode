@@ -1,5 +1,4 @@
 mod day1;
-#[macro_use]
 mod generate_day;
 mod io;
 use clap::{Parser, ValueEnum};

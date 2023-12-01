@@ -17,9 +17,8 @@ fn sorted_digits(line: &str) -> Vec<(usize, u32)> {
     let line = line.to_string();
     let digit_indexes: Vec<(usize, u32)> = WORDS_TO_NUMBERS
         .entries()
-        .map(|(k, v)| (line.find(k), v))
-        .filter(|(i, _v)| i.is_some())
-        .map(|(i, v)| (i.unwrap(), *v))
+        .map(|(k, v)| (line.match_indices(k).collect::<Vec<_>>(), v))
+        .flat_map(|(indecies, v)| indecies.into_iter().map(move |(i, _)| (i, *v)))
         .collect();
 
     let best_char_index_vec = line
@@ -42,6 +41,7 @@ pub fn run() {
         .lines()
         .map(|line| {
             let digits = sorted_digits(line);
+            //dbg!(&line, &digits);
             let ofirst = digits.first();
             let osecond = digits.last();
             if ofirst.is_none() || osecond.is_none() {
