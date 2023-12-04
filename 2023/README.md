@@ -1,7 +1,8 @@
 # Advent of Code 
 
 Some solutions for advent of code written in Rust
-Aka: Programs created when I should have either spent time practicing for my exams or be with my family
+
+**Aka**: Programs created when I should have either spent time practicing for my exams or be with my family
 
 ## Running
 Run a particular day with
@@ -28,7 +29,7 @@ generate_day!(day{day}, part1, part2);
 4. Implement run functions inside each part file.
 5. Add the day method in main.rs to the DAYS array.
 
-### Access problem
+## Access problem
 
 Access problem with
 ```sh
