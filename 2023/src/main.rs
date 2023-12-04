@@ -5,10 +5,6 @@ mod day4;
 mod generate_day;
 mod io;
 use clap::{Parser, ValueEnum};
-use day1::day1;
-use day2::day2;
-use day3::day3;
-use day4::day4;
 
 #[derive(ValueEnum, Clone, Debug)]
 pub enum Part {
@@ -26,7 +22,7 @@ struct Args {
     part: Part,
 }
 
-const DAYS: [fn(Part); 4] = [day1, day2, day3, day4];
+const DAYS: [fn(Part); 4] = [day1::day1, day2::day2, day3::day3, day4::day4];
 
 fn main() {
     let args: Args = Args::parse();
