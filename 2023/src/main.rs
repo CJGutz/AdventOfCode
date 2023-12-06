@@ -3,6 +3,7 @@ mod day2;
 mod day3;
 mod day4;
 mod day5;
+mod day6;
 mod generate_day;
 mod io;
 use clap::{Parser, ValueEnum};
@@ -23,7 +24,14 @@ struct Args {
     part: Part,
 }
 
-const DAYS: [fn(Part); 5] = [day1::day1, day2::day2, day3::day3, day4::day4, day5::day5];
+const DAYS: [fn(Part); 6] = [
+    day1::day1,
+    day2::day2,
+    day3::day3,
+    day4::day4,
+    day5::day5,
+    day6::day6,
+];
 
 fn main() {
     let args: Args = Args::parse();
