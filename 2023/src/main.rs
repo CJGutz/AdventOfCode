@@ -1,3 +1,4 @@
+mod btree;
 mod day1;
 mod day2;
 mod day3;
@@ -6,6 +7,7 @@ mod day5;
 mod day6;
 mod generate_day;
 mod io;
+
 use clap::{Parser, ValueEnum};
 
 #[derive(ValueEnum, Clone, Debug)]
