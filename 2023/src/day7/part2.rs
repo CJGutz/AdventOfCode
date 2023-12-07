@@ -5,7 +5,7 @@ const LABEL_RANK: [&str; 13] = [
     "J", "2", "3", "4", "5", "6", "7", "8", "9", "T", "Q", "K", "A",
 ];
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Debug, Clone)]
 enum HandType {
     FiveKind,
     FourKind,
@@ -26,54 +26,51 @@ const HAND_TYPE_RANK: [HandType; 7] = [
     HandType::FiveKind,
 ];
 
-fn of_a_kind(cards: &[&str; 5]) -> Vec<usize> {
+fn index_of<T: PartialEq>(array: &Vec<T>, item: &T) -> Option<usize> {
+    let index = array.iter().enumerate().find(|(_, i)| *i == item);
+    match index {
+        Some((i, _)) => Some(i),
+        None => None,
+    }
+}
+
+fn of_a_kind(cards: &Vec<&str>) -> Vec<usize> {
     let mut counts: Vec<(usize, &str)> = Vec::new();
     let mut jokers = 0;
+    let mut highest = 0;
+    let mut best_card = "J";
     for card in cards {
         if card.to_owned().eq("J") {
             jokers += 1;
             continue;
         }
-        counts.push((cards.iter().filter(|c| (**c).eq(*card)).count(), card));
-    }
-    let mut highest = 0;
-    let mut best_card = "J";
-    for (count, card) in counts.iter() {
-        if count > &highest {
-            highest = *count;
+
+        let counted_cards = cards.iter().filter(|c| (**c).eq(*card)).count();
+        if counted_cards > highest {
+            highest = counted_cards;
             best_card = card;
         }
+        counts.push((counted_cards, card));
     }
-    let mut changes: Vec<(usize, usize)> = Vec::new();
-    for (index, (count, card)) in counts.iter().enumerate() {
-        if best_card == *card {
-            changes.push((index, count + jokers))
-        }
-    }
-    for (index, new_count) in changes {
-        counts[index] = (new_count, counts[index].1);
-    }
-    for _ in 0..jokers {
-        counts.push((jokers + highest, "J"));
-    }
+    let counts = counts
+        .iter()
+        .map(|(count, card)| {
+            if best_card == *card {
+                *count + jokers
+            } else {
+                *count
+            }
+        })
+        .chain((0..jokers).map(|_| jokers + highest))
+        .collect();
 
-    counts.iter().map(|(count, _card)| *count).collect()
+    counts
 }
 
-fn highest_card<'a>(first: &[&str; 5], second: &[&str; 5]) -> Ordering {
+fn highest_card<'a>(first: &Vec<&str>, second: &Vec<&str>) -> Ordering {
     for (a, b) in first.iter().zip(second.iter()) {
-        let aindex = LABEL_RANK
-            .iter()
-            .enumerate()
-            .find(|label| label.1 == a)
-            .unwrap()
-            .0;
-        let bindex = LABEL_RANK
-            .iter()
-            .enumerate()
-            .find(|label| label.1 == b)
-            .unwrap()
-            .0;
+        let aindex = index_of(&LABEL_RANK.to_vec(), a).unwrap();
+        let bindex = index_of(&LABEL_RANK.to_vec(), b).unwrap();
 
         match aindex.partial_cmp(&bindex).unwrap() {
             Ordering::Equal => continue,
@@ -83,7 +80,7 @@ fn highest_card<'a>(first: &[&str; 5], second: &[&str; 5]) -> Ordering {
     Ordering::Equal
 }
 
-fn get_hand_type(cards: &[&str; 5]) -> HandType {
+fn get_hand_type(cards: &Vec<&str>) -> HandType {
     let mut n_equal = of_a_kind(cards);
     n_equal.sort();
     let highest = n_equal.last().unwrap();
@@ -113,7 +110,7 @@ fn get_hand_type(cards: &[&str; 5]) -> HandType {
 
 #[derive(Debug)]
 struct Hand<'a> {
-    cards: [&'a str; 5],
+    cards: Vec<&'a str>,
     bid: usize,
     hand_type: HandType,
 }
@@ -132,13 +129,7 @@ pub fn run() {
                     .splitn(6, "")
                     .skip(1)
                     .collect::<Vec<&str>>(),
-                s.nth(0).unwrap(),
-            )
-        })
-        .map(|(hand, bid)| {
-            (
-                [hand[0], hand[1], hand[2], hand[3], hand[4]],
-                bid.parse::<usize>().unwrap(),
+                s.nth(0).unwrap().parse::<usize>().unwrap(),
             )
         })
         .map(|(cards, bid)| {
@@ -153,19 +144,8 @@ pub fn run() {
         .collect();
 
     hands.sort_by(|a, b| {
-        let aindex = HAND_TYPE_RANK
-            .iter()
-            .enumerate()
-            .find(|label| *label.1 == a.hand_type)
-            .unwrap()
-            .0;
-
-        let bindex = HAND_TYPE_RANK
-            .iter()
-            .enumerate()
-            .find(|label| *label.1 == b.hand_type)
-            .unwrap()
-            .0;
+        let aindex = index_of(&HAND_TYPE_RANK.to_vec(), &a.hand_type);
+        let bindex = index_of(&HAND_TYPE_RANK.to_vec(), &b.hand_type);
 
         match aindex.partial_cmp(&bindex).unwrap() {
             Ordering::Equal => highest_card(&a.cards, &b.cards),
