@@ -1,4 +1,4 @@
-use crate::io::day_input;
+use crate::common::io::day_input;
 use std::cmp::Ordering;
 
 const LABEL_RANK: [&str; 13] = [

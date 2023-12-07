@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::io::day_input;
+use crate::common::io::day_input;
 
 pub fn run() {
     let input = day_input(4);

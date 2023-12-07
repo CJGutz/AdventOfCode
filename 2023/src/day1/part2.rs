@@ -1,4 +1,4 @@
-use crate::io::day_input;
+use crate::common::io::day_input;
 use phf::phf_map;
 
 static WORDS_TO_NUMBERS: phf::Map<&'static str, u32> = phf_map! {

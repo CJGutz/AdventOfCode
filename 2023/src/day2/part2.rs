@@ -1,6 +1,6 @@
 use std::cmp::Ordering;
 
-use crate::io::day_input;
+use crate::common::io::day_input;
 
 #[derive(Debug)]
 enum Color {
