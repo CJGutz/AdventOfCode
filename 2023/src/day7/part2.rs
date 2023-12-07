@@ -1,9 +1,12 @@
 use crate::common::io::day_input;
 use std::cmp::Ordering;
 
-const LABEL_RANK: [&str; 13] = [
-    "J", "2", "3", "4", "5", "6", "7", "8", "9", "T", "Q", "K", "A",
-];
+#[derive(Debug)]
+struct Hand<'a> {
+    cards: Vec<&'a str>,
+    bid: usize,
+    hand_type: HandType,
+}
 
 #[derive(PartialEq, Eq, Debug, Clone)]
 enum HandType {
@@ -16,6 +19,9 @@ enum HandType {
     HighCard,
 }
 
+const LABEL_RANK: [&str; 13] = [
+    "J", "2", "3", "4", "5", "6", "7", "8", "9", "T", "Q", "K", "A",
+];
 const HAND_TYPE_RANK: [HandType; 7] = [
     HandType::HighCard,
     HandType::Pair,
@@ -106,13 +112,6 @@ fn get_hand_type(cards: &Vec<&str>) -> HandType {
         5 => HandType::FiveKind,
         _ => panic!("Not allowed with more equal cards"),
     }
-}
-
-#[derive(Debug)]
-struct Hand<'a> {
-    cards: Vec<&'a str>,
-    bid: usize,
-    hand_type: HandType,
 }
 
 pub fn run() {
